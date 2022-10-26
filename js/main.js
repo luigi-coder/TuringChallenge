@@ -25,7 +25,7 @@ function renderCuentas(data){
     div.classList.add('col-md-4');
     div.classList.add('bg-white');
     div.innerHTML = `
-    <div id="h3A" class="bg-green text-light">
+    <div hidden id="h3A" class="bg-green text-light">
         <h3 class="p-3 bg-green"> << Opciones anteriores</h3>            
     </div>
     `
@@ -34,6 +34,7 @@ function renderCuentas(data){
 
     // addEventListener para el h3  
     const h3 = div.querySelector('#h3A');
+    console.log(h3);
     h3.addEventListener('click', () => {
         
         if(paginaActual - 1 < 0) return;
@@ -42,13 +43,18 @@ function renderCuentas(data){
 
         getDataDePagina(paginaActual);
         
-        /* if(paginaActual === 0){
-            h3.style.display = 'none';
+        if(paginaActual === 0){
+            console.log("Verdadero")
+            h3.hidden = true;
+            h32.hidden = false;
+
         }else {
-            h3.style.display = 'block';
-        } */
+            console.log("Falso");
+            h3.hidden = false;
+        }
 
-
+        d.querySelector('#cuentas').innerHTML = "";
+        getDataDePagina(paginaActual);
     });
 
     
@@ -57,6 +63,7 @@ function renderCuentas(data){
     total_de_paginas = totalPaginas;
 
     for(let i = 0; i < totalPaginas; i++){
+
 
         const arr = data.cuentas.slice(
             i * ITEMS_POR_PAGINA,
@@ -94,11 +101,22 @@ function renderCuentas(data){
         
         getDataDePagina(paginaActual);
 
-        /* if((paginaActual + 1) === total_de_paginas){
-            h32.style.display = 'none';
+        if((paginaActual + 1) === total_de_paginas){
+            console.log("Verdadero")
+            h32.hidden = true;
+
+
         }else {
-            h32.style.display = 'block';
-        } */
+            console.log("Falso");
+            h32.hidden = false;
+            h3.hidden = false;
+
+            
+        }
+
+        d.querySelector('#cuentas').innerHTML = "";
+
+            getDataDePagina(paginaActual);
 
     });
 
@@ -112,16 +130,15 @@ function getDataDePagina(indexPagina){
 
         const div15 = d.createElement('div');
         div15.classList.add('col-md-4');
-        div15.classList.add('bg-white');
         div15.innerHTML = `
-        <div class="col-md-4bg-white">
-            <div class="bg-green text-light">
+        <div class="col-md-4">
+            <div>
                 <h3>Cuenta Corriente</h3>
                 <h4>Nro:${cuenta.n}</h4>
             </div>
         </div>
         `
-        $padreCuentas.appendChild(div15);
+        $cuentas.appendChild(div15);
     }); 
 }
 

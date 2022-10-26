@@ -1,8 +1,6 @@
 .bg-green{
     background-color: #54B949;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-radius: 5px;
+    
 }
 .bg-light{
     background-color: #fff;
@@ -22,4 +20,13 @@
 .salir {
     margin-top: 100px;
     width: 100px;
+}
+.contenedorCuentas {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 5px;
+}
+
+.contenedor .text-light {
+    background-color: blue;
 }
