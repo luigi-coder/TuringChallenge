@@ -51,7 +51,6 @@ function renderCuentas(data){
 
     // addEventListener para boton anterior 
     const h3 = div.querySelector('#h3A');
-    console.log(h3);
     h3.addEventListener('click', () => {
         
         if(paginaActual - 1 < 0) return;
@@ -61,12 +60,17 @@ function renderCuentas(data){
         getDataDePagina(paginaActual);
         
         if(paginaActual === 0){
-            console.log("Verdadero")
+            //console.log("Verdadero")
             h3.hidden = true;
             h32.hidden = false;
 
-        }else {
-            console.log("Falso");
+        }else if(paginaActual > 0){
+            //console.log("Falso")
+            h3.hidden = false;
+            h32.hidden = false;
+        }
+        else {
+            //console.log("Falso");
             h3.hidden = false;
         }
 
@@ -80,14 +84,13 @@ function renderCuentas(data){
     total_de_paginas = totalPaginas;
 
     for(let i = 0; i < totalPaginas; i++){
-
-
+        
         const arr = data.cuentas.slice(
             i * ITEMS_POR_PAGINA,
             i * ITEMS_POR_PAGINA + ITEMS_POR_PAGINA
-        );
+        ); 
 
-        arrayDePaginas.push(arr);
+        arrayDePaginas.push(arr); 
 
 
     }
@@ -116,17 +119,17 @@ function renderCuentas(data){
         
         if((paginaActual + 1) >= total_de_paginas) return;
         paginaActual++;
-        console.log(paginaActual);
+        //console.log(paginaActual);
         
         getDataDePagina(paginaActual);
 
         if((paginaActual + 1) === total_de_paginas){
-            console.log("Verdadero")
+            //console.log("Verdadero")
             h32.hidden = true;
 
 
         }else {
-            console.log("Falso");
+            //console.log("Falso");
             h32.hidden = false;
             h3.hidden = false;
 
@@ -146,49 +149,53 @@ function renderCuentas(data){
 function getDataDePagina(indexPagina){
 
     arrayDePaginas[indexPagina].forEach((cuenta, index) => {
-        console.log(cuenta);
-        console.log(cuenta.tipo_letras.toUpperCase());
+        //console.log(cuenta);
+        //console.log(cuenta.tipo_letras.toUpperCase());
         let tipoLetras = cuenta.tipo_letras.toUpperCase();
         let moneda = cuenta.moneda
-        console.log(moneda);
+        //console.log(moneda);
         const div15 = d.createElement('div');
         div15.classList.add('col-md-4');
 
         if(tipoLetras === "CC"){
             div15.innerHTML = `
             <div id="cadaCuenta${index}" class="bg-green text-light contenedorCuentas">
-            <h3>Cuenta Corriente</h3>
+            <h3 id="tituloTipoCuenta">Cuenta Corriente</h3>
             <h4>Nro:${cuenta.n}</h4>
             </div>
             `
         }else {
             div15.innerHTML = `
             <div id="cadaCuenta${index}" class="bg-green text-light contenedorCuentas">
-            <h3>Caja de Ahorro</h3>
+            <h3 id="tituloTipoCuenta">Caja de Ahorro</h3>
             <h4>Nro:${cuenta.n}</h4>
             </div>
             `
         }    
+
+        const titulo = document.querySelectorAll("#tituloTipoCuenta");
+        console.log(titulo);
         
         $cuentas.appendChild(div15);
 
         const $divCadaCuenta = d.getElementById(`cadaCuenta${index}`);
         const $infoCuentas = d.getElementById('infoCuentas');
         const $cardsCuentas = d.getElementById('cardsCuentas');
-        const $btnSalir = d.getElementById('btnSalir');
-        console.log($btnSalir);
+        
+        const $btnSalir2 = d.getElementById('btnSalir2');
+
         
         $infoCuentas.hidden = true;
-        $btnSalir.hidden = true;
+        $btnSalir2.hidden = true;
         $divCadaCuenta.addEventListener('click', () => {
             $infoCuentas.hidden = false;
             $cardsCuentas.hidden = true;
-            $btnSalir.hidden = false;
+            $btnSalir2.hidden = false;
 
-            $btnSalir.addEventListener('click', () => {
+            $btnSalir2.addEventListener('click', () => {
                 $infoCuentas.hidden = true;
                 $cardsCuentas.hidden = false;
-                $btnSalir.hidden = true;
+                $btnSalir2.hidden = true;
             });
 
             if(tipoLetras === "CC"){
@@ -321,5 +328,11 @@ function getDataDePagina(indexPagina){
 
     }); 
 
+    const $btnSalir1 = d.getElementById('btnSalir1');
+
+    $btnSalir1.addEventListener('click', (e) => {
+        e.preventDefault();
+        location.href = "index.html";
+    });
 }
 
