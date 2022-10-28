@@ -12,7 +12,7 @@
   </head>
   <body>
     
-    <div class="container">
+    <div id="cardsCuentas" class="container">
         <div class="bg-green logo">
             <img src="img/logo.png" alt="">
         </div>
@@ -21,16 +21,25 @@
             <h1 class="text-blue">Selecciona la Cuenta a Consultar</h1>
         </div>
         <div id="padreCuentas" class="row text-center mt-5">
+            <div id="previo">
+
+            </div>
             <div id="cuentas" class="row">
 
             </div>
-        </div>
-    </div>
-    
-    
-    
+            <div id="siguiente">
+
+            </div>
+          </div>
+          <button class="btn bg-green btnSalir">Salir</button>
     </div>
 
+    <div class="container">
+      <div hidden id="infoCuentas">
+
+      </div>
+      <button hidden class="btn bg-green btnSalir">Salir</button>
+    </div>
     
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
