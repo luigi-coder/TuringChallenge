@@ -175,11 +175,21 @@ function getDataDePagina(indexPagina){
         const $divCadaCuenta = d.getElementById(`cadaCuenta${index}`);
         const $infoCuentas = d.getElementById('infoCuentas');
         const $cardsCuentas = d.getElementById('cardsCuentas');
+        const $btnSalir = d.getElementById('btnSalir');
+        console.log($btnSalir);
         
         $infoCuentas.hidden = true;
+        $btnSalir.hidden = true;
         $divCadaCuenta.addEventListener('click', () => {
             $infoCuentas.hidden = false;
             $cardsCuentas.hidden = true;
+            $btnSalir.hidden = false;
+
+            $btnSalir.addEventListener('click', () => {
+                $infoCuentas.hidden = true;
+                $cardsCuentas.hidden = false;
+                $btnSalir.hidden = true;
+            });
 
             if(tipoLetras === "CC"){
                 if(moneda === "u$s"){
@@ -307,62 +317,9 @@ function getDataDePagina(indexPagina){
                 }
             }
 
-
-            /* infoCuentas.innerHTML = `
-                <div class="bg-green logo">
-                    <img src="img/logo.png" alt="">
-                </div>
-                <div class="col-md-12">
-                    <div class="text-center infoCuentas">
-                        <h3 class="">Consulta tu saldo</h3>
-                        <h1 class="">Este es tu saldo actual</h1>
-                        <h4 class="">Saldo de la cuenta: ${cuenta.saldo} </h4>
-                        <h4 class="">Tipo de cuenta: Caja de Ahorro en Pesos</h4>
-                        <h4 class="">Saldo: ${cuenta.n}</h4>
-                    </div>
-                </div>
-                `  */
         });
 
-        /* // addEventListener para cada cuenta 
-        const divsCuentas = d.querySelectorAll('#cadaCuenta');
-        const infoCuentas = d.getElementById('infoCuentas');
-        const cardsCuentas = d.getElementById('cardsCuentas');
-        
-        //infoCuentas.style.display = 'none';
-        infoCuentas.hidden = true;
-        console.log(divsCuentas);
-         */
-        
-        /* divsCuentas.forEach(div => {
-            console.log(div);
-            // un click para cada cuenta
-            div.addEventListener('click', (e) => {
-                console.log(e.target);
-                
-                console.log(cuenta.saldo);
-                //infoCuentas.style.display = 'block';
-                infoCuentas.hidden = false;
-                cardsCuentas.hidden = true;
-                infoCuentas.innerHTML = `
-                <div class="bg-green logo">
-                    <img src="img/logo.png" alt="">
-                </div>
-                <div class="col-md-12">
-                    <div class="text-center infoCuentas">
-                        <h3 class="">Consulta tu saldo</h3>
-                        <h1 class="">Este es tu saldo actual</h1>
-                        <h4 class="">Saldo de la cuenta ${cuenta.saldo} </h4>
-                        <h4 class="">Nro: ${div.querySelector('h4').textContent}</h4>
-                        <h4 class="">Saldo: ${div.querySelector('h4').textContent}</h4>
-                    </div>
-                </div>
-                ` 
-            })
-        }) */
     }); 
-
-    
 
 }
 
