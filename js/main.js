@@ -1,38 +1,55 @@
-
+// Contantes
 const url = 'https://api.npoint.io/97d89162575a9d816661';
 const d = document;
-const data = fetch(url)
-.then(response => response.json())
-.then(data => {
-    renderCuentas(data);
-});
+const ITEMS_POR_PAGINA = 5;
 
+d.addEventListener('DOMContentLoaded', () => {
+    getFetch(url)
+})
+
+function getFetch(url){
+
+    fetch(url)
+    .then(res => res.json())
+    .then(data => {
+        renderCuentas(data);
+    })
+    .catch(err => console.log(err));
+}
+
+// Contantes del DOM
 const $padreCuentas = d.getElementById('padreCuentas');
 const $cuentas = d.getElementById('cuentas');
+const $previo = d.getElementById('previo');
+const $siguiente = d.getElementById('siguiente');
 
 
 let arrayDePaginas = [];
 let paginaActual = 0;
 let total_de_paginas = 0;
 
-// constantes
-const ITEMS_POR_PAGINA = 5;
 
 function renderCuentas(data){
 
     // div de opciones anteriores
     const div = d.createElement('div');
+   
     div.classList.add('col-md-4');
     div.classList.add('bg-white');
     div.innerHTML = `
-    <div hidden id="h3A" class="bg-green text-light">
-        <h3 class="p-3 bg-green"> << Opciones anteriores</h3>            
+    <div class="contendedorBotones">
+        <div hidden id="h3A" class="contenedorOpciones bg-green text-light">
+            <h3 class="bg-green"> << Opciones anteriores</h3>            
+        </div>
     </div>
+
+    
     `
 
-    $padreCuentas.appendChild(div);
+    //$padreCuentas.appendChild(div);
+    $previo.appendChild(div);
 
-    // addEventListener para el h3  
+    // addEventListener para boton anterior 
     const h3 = div.querySelector('#h3A');
     console.log(h3);
     h3.addEventListener('click', () => {
@@ -84,14 +101,16 @@ function renderCuentas(data){
     div2.classList.add('col-md-4');
     div2.classList.add('bg-white');
     div2.innerHTML = `
-    <div id="h3B" class="bg-green text-light">
-        <h3 class="p-3 bg-green"> Mas opciones >> </h3>            
+    <div>
+        <div id="h3B" class="contenedorOpciones bg-green text-light">
+            <h3 class="bg-green"> Mas <br> opciones >> </h3>            
+        </div>
     </div>
     
     `
-    $padreCuentas.appendChild(div2);
+    $siguiente.appendChild(div2);
 
-    // addEventListener para el h3
+    // addEventListener para el boton siguiente
     const h32 = div2.querySelector('#h3B');
     h32.addEventListener('click', () => {
         
@@ -126,19 +145,224 @@ function renderCuentas(data){
 
 function getDataDePagina(indexPagina){
 
-    arrayDePaginas[indexPagina].forEach(cuenta => {
-
+    arrayDePaginas[indexPagina].forEach((cuenta, index) => {
+        console.log(cuenta);
+        console.log(cuenta.tipo_letras.toUpperCase());
+        let tipoLetras = cuenta.tipo_letras.toUpperCase();
+        let moneda = cuenta.moneda
+        console.log(moneda);
         const div15 = d.createElement('div');
         div15.classList.add('col-md-4');
-        div15.innerHTML = `
-        <div class="col-md-4">
-            <div>
-                <h3>Cuenta Corriente</h3>
-                <h4>Nro:${cuenta.n}</h4>
+
+        if(tipoLetras === "CC"){
+            div15.innerHTML = `
+            <div id="cadaCuenta${index}" class="bg-green text-light contenedorCuentas">
+            <h3>Cuenta Corriente</h3>
+            <h4>Nro:${cuenta.n}</h4>
             </div>
-        </div>
-        `
+            `
+        }else {
+            div15.innerHTML = `
+            <div id="cadaCuenta${index}" class="bg-green text-light contenedorCuentas">
+            <h3>Caja de Ahorro</h3>
+            <h4>Nro:${cuenta.n}</h4>
+            </div>
+            `
+        }    
+        
         $cuentas.appendChild(div15);
+
+        const $divCadaCuenta = d.getElementById(`cadaCuenta${index}`);
+        const $infoCuentas = d.getElementById('infoCuentas');
+        const $cardsCuentas = d.getElementById('cardsCuentas');
+        
+        $infoCuentas.hidden = true;
+        $divCadaCuenta.addEventListener('click', () => {
+            $infoCuentas.hidden = false;
+            $cardsCuentas.hidden = true;
+
+            if(tipoLetras === "CC"){
+                if(moneda === "u$s"){
+                    $infoCuentas.innerHTML = `
+                    <div class="bg-green logo">
+                        <img src="img/logo.png" alt="">
+                    </div>
+                    <div class="col-md-12">
+                        <div class="text-center infoCuentas">
+                            <h3 class="">Consulta tu saldo</h3>
+                            <h1 class="">Este es tu saldo actual</h1>
+                            <h4>Saldo de la cuenta: ${cuenta.saldo}u$s</h4>
+                            <h4>Tipo de cuenta: Cuenta Corriente en Dolares</h4>
+                            <h4>Número de cuenta:${cuenta.n}</h4>
+                        </div>
+                    </div>
+                    `
+                }else if(moneda === "$"){
+                    $infoCuentas.innerHTML = `
+                    <div class="bg-green logo">
+                        <img src="img/logo.png" alt="">
+                    </div>
+                    <div class="col-md-12">
+                        <div class="text-center infoCuentas">
+                            <h3 class="">Consulta tu saldo</h3>
+                            <h1 class="">Este es tu saldo actual</h1>
+                            <h4>Saldo de la cuenta: ${cuenta.saldo}$</h4>
+                            <h4>Tipo de cuenta: Cuenta Corriente en Pesos</h4>
+                            <h4>Número de cuenta:${cuenta.n}</h4>
+                        </div>
+                    </div>
+                    `
+                }else if(moneda === "$uy"){
+                    $infoCuentas.innerHTML = `
+                    <div class="bg-green logo">
+                        <img src="img/logo.png" alt="">
+                    </div>
+                    <div class="col-md-12">
+                        <div class="text-center infoCuentas">
+                            <h3 class="">Consulta tu saldo</h3>
+                            <h1 class="">Este es tu saldo actual</h1>
+                            <h4>Saldo de la cuenta: ${cuenta.saldo}$uy</h4>
+                            <h4>Tipo de cuenta: Cuenta Corriente en Pesos Uruguayos</h4>
+                            <h4>Número de cuenta:${cuenta.n}</h4>
+                        </div>
+                    </div>
+                    `
+                }else if(moneda === "bs"){
+                    $infoCuentas.innerHTML = `
+                    <div class="bg-green logo">
+                        <img src="img/logo.png" alt="">
+                    </div>
+                    <div class="col-md-12">
+                        <div class="text-center infoCuentas">
+                            <h3 class="">Consulta tu saldo</h3>
+                            <h1 class="">Este es tu saldo actual</h1>
+                            <h4>Saldo de la cuenta: ${cuenta.saldo}bs</h4>
+                            <h4>Tipo de cuenta: Cuenta Corriente en Bolivares</h4>
+                            <h4>Número de cuenta:${cuenta.n}</h4>
+                        </div>
+                    </div>
+                    `
+                }
+            }else if(tipoLetras === "CA"){
+                if(moneda === "u$s"){
+                    $infoCuentas.innerHTML = `
+                    <div class="bg-green logo">
+                        <img src="img/logo.png" alt="">
+                    </div>
+                    <div class="col-md-12">
+                        <div class="text-center infoCuentas">
+                            <h3 class="">Consulta tu saldo</h3>
+                            <h1 class="">Este es tu saldo actual</h1>
+                            <h4>Saldo de la cuenta: ${cuenta.saldo}u$s</h4>
+                            <h4>Tipo de cuenta: Caja de Ahorro en Dolares</h4>
+                            <h4>Número de cuenta:${cuenta.n}</h4>
+                        </div>
+                    </div>
+                    `
+                }else if(moneda === "$"){
+                    $infoCuentas.innerHTML = `
+                    <div class="bg-green logo">
+                        <img src="img/logo.png" alt="">
+                    </div>
+                    <div class="col-md-12">
+                        <div class="text-center infoCuentas">
+                            <h3 class="">Consulta tu saldo</h3>
+                            <h1 class="">Este es tu saldo actual</h1>
+                            <h4>Saldo de la cuenta: ${cuenta.saldo}$</h4>
+                            <h4>Tipo de cuenta: Caja de Ahorro en Pesos</h4>
+                            <h4>Número de cuenta:${cuenta.n}</h4>
+                        </div>
+                    </div>
+                    `
+                }else if(moneda === "$uy"){
+                    $infoCuentas.innerHTML = `
+                    <div class="bg-green logo">
+                        <img src="img/logo.png" alt="">
+                    </div>
+                    <div class="col-md-12">
+                        <div class="text-center infoCuentas">
+                            <h3 class="">Consulta tu saldo</h3>
+                            <h1 class="">Este es tu saldo actual</h1>
+                            <h4>Saldo de la cuenta: ${cuenta.saldo}$uy</h4>
+                            <h4>Tipo de cuenta: Caja de Ahorro en Pesos Uruguayos</h4>
+                            <h4>Número de cuenta:${cuenta.n}</h4>
+                        </div>
+                    </div>
+                    `
+                }else if(moneda === "bs"){
+                    $infoCuentas.innerHTML = `
+                    <div class="bg-green logo">
+                        <img src="img/logo.png" alt="">
+                    </div>
+                    <div class="col-md-12">
+                        <div class="text-center infoCuentas">
+                            <h3 class="">Consulta tu saldo</h3>
+                            <h1 class="">Este es tu saldo actual</h1>
+                            <h4>Saldo de la cuenta: ${cuenta.saldo}bs</h4>
+                            <h4>Tipo de cuenta: Caja de Ahorro en Bolivares</h4>
+                            <h4>Número de cuenta:${cuenta.n}</h4>
+                        </div>
+                    </div>
+                    `
+                }
+            }
+
+
+            /* infoCuentas.innerHTML = `
+                <div class="bg-green logo">
+                    <img src="img/logo.png" alt="">
+                </div>
+                <div class="col-md-12">
+                    <div class="text-center infoCuentas">
+                        <h3 class="">Consulta tu saldo</h3>
+                        <h1 class="">Este es tu saldo actual</h1>
+                        <h4 class="">Saldo de la cuenta: ${cuenta.saldo} </h4>
+                        <h4 class="">Tipo de cuenta: Caja de Ahorro en Pesos</h4>
+                        <h4 class="">Saldo: ${cuenta.n}</h4>
+                    </div>
+                </div>
+                `  */
+        });
+
+        /* // addEventListener para cada cuenta 
+        const divsCuentas = d.querySelectorAll('#cadaCuenta');
+        const infoCuentas = d.getElementById('infoCuentas');
+        const cardsCuentas = d.getElementById('cardsCuentas');
+        
+        //infoCuentas.style.display = 'none';
+        infoCuentas.hidden = true;
+        console.log(divsCuentas);
+         */
+        
+        /* divsCuentas.forEach(div => {
+            console.log(div);
+            // un click para cada cuenta
+            div.addEventListener('click', (e) => {
+                console.log(e.target);
+                
+                console.log(cuenta.saldo);
+                //infoCuentas.style.display = 'block';
+                infoCuentas.hidden = false;
+                cardsCuentas.hidden = true;
+                infoCuentas.innerHTML = `
+                <div class="bg-green logo">
+                    <img src="img/logo.png" alt="">
+                </div>
+                <div class="col-md-12">
+                    <div class="text-center infoCuentas">
+                        <h3 class="">Consulta tu saldo</h3>
+                        <h1 class="">Este es tu saldo actual</h1>
+                        <h4 class="">Saldo de la cuenta ${cuenta.saldo} </h4>
+                        <h4 class="">Nro: ${div.querySelector('h4').textContent}</h4>
+                        <h4 class="">Saldo: ${div.querySelector('h4').textContent}</h4>
+                    </div>
+                </div>
+                ` 
+            })
+        }) */
     }); 
+
+    
+
 }
 
