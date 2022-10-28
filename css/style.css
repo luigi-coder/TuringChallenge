@@ -12,21 +12,34 @@
     margin-top: 50px;
     margin-bottom: 50px;
 }
-.col-md-4{
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
 
 .salir {
     margin-top: 100px;
     width: 100px;
 }
 .contenedorCuentas {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 10px 10px 10px;
+    margin: 0 0 10px 0;
     border-radius: 5px;
 }
+.contenedorOpciones {
+    padding: 10px 10px 10px 10px;
+    margin: 0px 0px 10px -15px;
+    border-radius: 5px;
+    width: 300px;
+}
 
-.contenedor .text-light {
-    background-color: blue;
+.infoCuentas h3{
+    font-size: 1rem;
+    color: #0e1de7;
+}
+
+.infoCuentas h1 {
+    color: #0e1de7;
+    margin-bottom: 100px;
+}
+.btnSalir {
+    margin-top: 100px;
+    width: 80px;
+    color: #fff;
 }
