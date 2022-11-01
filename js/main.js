@@ -1,7 +1,12 @@
-// Contantes
 const url = 'https://api.npoint.io/97d89162575a9d816661';
 const d = document;
 const ITEMS_POR_PAGINA = 5;
+
+const test = d.getElementById('btnTest');
+test.addEventListener('click', () => {
+    run_test();
+    
+});
 
 d.addEventListener('DOMContentLoaded', () => {
     getFetch(url)
@@ -13,6 +18,9 @@ function getFetch(url){
     .then(res => res.json())
     .then(data => {
         renderCuentas(data);
+        // Colocar un boton en el HTML
+        //revisar_titulos_cards_cuentas();
+
     })
     .catch(err => console.log(err));
 }
@@ -45,8 +53,6 @@ function renderCuentas(data){
 
     
     `
-
-    //$padreCuentas.appendChild(div);
     $previo.appendChild(div);
 
     // addEventListener para boton anterior 
@@ -55,22 +61,18 @@ function renderCuentas(data){
         
         if(paginaActual - 1 < 0) return;
         paginaActual--;
-        console.log(paginaActual);
 
         getDataDePagina(paginaActual);
         
         if(paginaActual === 0){
-            //console.log("Verdadero")
             h3.hidden = true;
             h32.hidden = false;
 
         }else if(paginaActual > 0){
-            //console.log("Falso")
             h3.hidden = false;
             h32.hidden = false;
         }
         else {
-            //console.log("Falso");
             h3.hidden = false;
         }
 
@@ -119,7 +121,6 @@ function renderCuentas(data){
         
         if((paginaActual + 1) >= total_de_paginas) return;
         paginaActual++;
-        //console.log(paginaActual);
         
         getDataDePagina(paginaActual);
 
@@ -149,32 +150,27 @@ function renderCuentas(data){
 function getDataDePagina(indexPagina){
 
     arrayDePaginas[indexPagina].forEach((cuenta, index) => {
-        //console.log(cuenta);
-        //console.log(cuenta.tipo_letras.toUpperCase());
+       
         let tipoLetras = cuenta.tipo_letras.toUpperCase();
         let moneda = cuenta.moneda
-        //console.log(moneda);
         const div15 = d.createElement('div');
         div15.classList.add('col-md-4');
 
         if(tipoLetras === "CC"){
             div15.innerHTML = `
             <div id="cadaCuenta${index}" class="bg-green text-light contenedorCuentas">
-            <h3 id="tituloTipoCuenta">Cuenta Corriente</h3>
-            <h4>Nro:${cuenta.n}</h4>
+            <h3 class="tituloTipoCuenta">Cuenta Corriente</h3>
+            <h4 class="nroCuentas" >Nro:${cuenta.n}</h4>
             </div>
             `
         }else {
             div15.innerHTML = `
             <div id="cadaCuenta${index}" class="bg-green text-light contenedorCuentas">
-            <h3 id="tituloTipoCuenta">Caja de Ahorro</h3>
-            <h4>Nro:${cuenta.n}</h4>
+            <h3 class="tituloTipoCuenta">Caja de Ahorro</h3>
+            <h4 class="nroCuentas">Nro:${cuenta.n}</h4>
             </div>
             `
         }    
-
-        const titulo = document.querySelectorAll("#tituloTipoCuenta");
-        console.log(titulo);
         
         $cuentas.appendChild(div15);
 
