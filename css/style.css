@@ -50,3 +50,9 @@
     margin-top: 275px;
 }
 
+.btnTest{
+    background-color: red;
+    float: right;
+    background-color: #54B949;
+    color: #fff;
+}
