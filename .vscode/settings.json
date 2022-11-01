@@ -1,0 +1,15 @@
+{
+    "liveServer.settings.port": 5502,
+    "editor.fontFamily": "'Operator Mono',  consolas, 'Courier New', monospace",
+    "editor.fontWeight": "600",
+    "editor.fontSize": 16,
+    "terminal.integrated.fontFamily": "consolas, monospace",
+    "terminal.integrated.fontSize": 16,
+    "editor.minimap.enabled": false,
+    "vscode-mysql.ressulTheme": "dark",
+    "window.zoomLevel": -2,
+    //"workbench.colorTheme": "Synthwave x Fluoromachine",
+    "workbench.colorTheme": "SynthWave '84",
+    "workbench.iconTheme": "sweet-vscode-icons",
+    "synthwave84.brightness": 0.90,
+}
