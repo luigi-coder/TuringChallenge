@@ -1,19 +1,20 @@
-const url = 'https://api.npoint.io/97d89162575a9d816661';
-const d = document;
+const URL = 'https://api.npoint.io/97d89162575a9d816661';
+const D = document;
 const ITEMS_POR_PAGINA = 5;
 
-const test = d.getElementById('btnTest');
+
+const test = D.getElementById('btnTest');
 test.addEventListener('click', () => {
     run_test();
 });
 
-d.addEventListener('DOMContentLoaded', () => {
-    getFetch(url)
+D.addEventListener('DOMContentLoaded', () => {
+    getFetch(URL)
 })
 
-function getFetch(url){
+function getFetch(URL){
 
-    fetch(url)
+    fetch(URL)
     .then(res => res.json())
     .then(data => {
         renderCuentas(data);
@@ -22,12 +23,15 @@ function getFetch(url){
 }
 
 // Contantes del DOM
-const $padreCuentas = d.getElementById('padreCuentas');
-const $cuentas = d.getElementById('cuentas');
+const $padreCuentas = D.getElementById('padreCuentas');
+const $cuentas = D.getElementById('cuentas');
 
 let arrayDePaginas = [];
 let paginaActual = 0;
 let total_de_paginas = 0;
+
+const FIRST_PAGE = 0;
+const LAST_PAGE = total_de_paginas - 1;
 
 
 function renderCuentas(data){
@@ -40,10 +44,13 @@ function renderCuentas(data){
 
 }
 
-// funcion encargada de cortar el array(API)
+// funcion encargada de cortar el array(API), mediante una logica usando for y slice
+// segun la cantidad de elementos que se quiere mostrar en la pantalla o vista
 function cortesAlArrayPrincipal(totalPaginas, ITEMS_POR_PAGINA, arrayDePaginas, data){
-
-    const previo = {
+    // Creacion de dos objetos, para tratarlos como elementos en el array principal, para
+    // poder jugar con ellos metiendo y sacando al principio o al final de los pedazos de
+    // array
+    const BTN_ANTERIOR = {
         "e": "",
         "n": "<< Opciones anteriores",
         "t": "",
@@ -51,7 +58,7 @@ function cortesAlArrayPrincipal(totalPaginas, ITEMS_POR_PAGINA, arrayDePaginas, 
         "moneda": "",
         "tipo_letras": "Previo"
     }
-    const siguiente = {
+    const BTN_SIGUIENTE = {
         "e": "",
         "n": " Mas <br> opciones >>",
         "t": "",
@@ -59,54 +66,55 @@ function cortesAlArrayPrincipal(totalPaginas, ITEMS_POR_PAGINA, arrayDePaginas, 
         "moneda": "",
         "tipo_letras": "Siguiente"
     }
+    
     let ultimoComodin;
+    console.log(ultimoComodin);
 
     for(let i = 0; i < totalPaginas; i++){
 
-        if(i === 0){
-            //console.log('entro en la cero');
+        // Precargamos los botones siguiente y anterior
+        if(i === FIRST_PAGE){
             const arr = data.cuentas.slice(
                 i * ITEMS_POR_PAGINA,
                 i * ITEMS_POR_PAGINA + ITEMS_POR_PAGINA
             ); 
                 
-            arr.push(siguiente);
-
-            arrayDePaginas.push(arr); 
-            //console.log(arr)
-        }else if(i === 1){
-            //console.log('entro en la uno');
-            
-            const arr = data.cuentas.slice(
-                i * ITEMS_POR_PAGINA,
-                i * ITEMS_POR_PAGINA + ITEMS_POR_PAGINA
-            ); 
-
-            // Agregar previo al inicio del arr
-            arr.unshift(previo);
-            // capturar el ultimo elemento del arr
-            const ultimo = arr[arr.length - 1];
-            
-            ultimoComodin = ultimo;
-            // cambiar el ultimo elemento del arr por el siguiente
-            arr.pop();
-            arr.push(siguiente);
+            arr.push(BTN_SIGUIENTE);
 
             arrayDePaginas.push(arr);
-        }else if(i === 2){
-            //console.log(ultimoComodin);
+            
+        }else if(i === LAST_PAGE){
+
             const arr = data.cuentas.slice(
                 i * ITEMS_POR_PAGINA,
                 i * ITEMS_POR_PAGINA + ITEMS_POR_PAGINA
             ); 
             // Agregar el elemento de la cuenta 872378326710
-            arr.unshift(ultimoComodin);
+            //arr.unshift(ultimoComodin);
             // Agrear el elemento que quitamos en el anterior
-            arr.unshift(previo);
+            arr.unshift(BTN_ANTERIOR);
                 
-            arrayDePaginas.push(arr); 
+            arrayDePaginas.push(arr);
+        }else {
+            const arr = data.cuentas.slice(
+                i * ITEMS_POR_PAGINA,
+                i * ITEMS_POR_PAGINA + ITEMS_POR_PAGINA
+            ); 
+
+            // Agregar BTN_ANTERIOR al inicio del arr
+            arr.unshift(BTN_ANTERIOR);
+            // capturar el ultimo elemento del arr
+            const ultimo = arr[arr.length - 1];
             
+            ultimoComodin = ultimo;
+            // cambiar el ultimo elemento del arr por el BTN_SIGUIENTE
+            arr.pop();
+            arr.push(BTN_SIGUIENTE);
+
+            arrayDePaginas.push(arr);
+
         }
+
 
     }
 
@@ -120,14 +128,14 @@ function getDataDePagina(paginaActual){
         
         let tipoLetras = cuenta.tipo_letras.toUpperCase();
         let moneda = cuenta.moneda
-        const div15 = d.createElement('div');
+        const div15 = D.createElement('div');
         div15.classList.add('col-md-4');
 
         evaluacionTipoCuenta(tipoLetras, cuenta, index, div15, paginaActual);
 
-        const $infoCuentas = d.getElementById('infoCuentas');
-        const $cardsCuentas = d.getElementById('cardsCuentas');        
-        const $btnSalir2 = d.getElementById('btnSalir2');
+        const $infoCuentas = D.getElementById('infoCuentas');
+        const $cardsCuentas = D.getElementById('cardsCuentas');        
+        const $btnSalir2 = D.getElementById('btnSalir2');
 
         $btnSalir2.hidden = true;
       
@@ -178,9 +186,9 @@ function evaluacionBtnSiguientePrevio(tipoLetras, div15, paginaActual, index){
         <div id="cadaCuenta${index}" class="bg-green text-light contenedorCuentas">
         <h3 class="tituloTipo">Mas <br> Opciones >> </h3>`
 
-        // addEventListener al boton siguiente
+        // addEventListener al boton BTN_SIGUIENTE
         div15.addEventListener('click', () => {
-            d.querySelector('#cuentas').innerHTML = "";
+            D.querySelector('#cuentas').innerHTML = "";
             paginaActual++;
             getDataDePagina(paginaActual);
         });
@@ -193,7 +201,7 @@ function evaluacionBtnSiguientePrevio(tipoLetras, div15, paginaActual, index){
 
         // addEventListener al boton anterior
         div15.addEventListener('click', () => {
-            d.querySelector('#cuentas').innerHTML = "";
+            D.querySelector('#cuentas').innerHTML = "";
             paginaActual--;
             getDataDePagina(paginaActual);
         });
@@ -203,7 +211,7 @@ function evaluacionBtnSiguientePrevio(tipoLetras, div15, paginaActual, index){
 // funcion encargada de mostrar la informacion de cada cuenta
 function informacionDeLasCuentas(tipoLetras, infoCuentas, cardsCuentas, btnSalir2, moneda, cuenta, div15){
 
-    // addEventListener a cada cuenta, menos a los botones de siguiente y previo
+    // addEventListener a cada cuenta, menos a los botones de BTN_SIGUIENTE y BTN_ANTERIOR
     if(tipoLetras !== "SIGUIENTE" && tipoLetras !== "PREVIO"){
         div15.addEventListener('click', () => {
             console.log('click en la cuenta');
@@ -295,7 +303,7 @@ function evaluacionDelTipoDeMoneda(moneda, cuenta){
 
 function volverAlInicio(){
 
-    const $btnSalir1 = d.getElementById('btnSalir1');
+    const $btnSalir1 = D.getElementById('btnSalir1');
 
     $btnSalir1.addEventListener('click', (e) => {
         
